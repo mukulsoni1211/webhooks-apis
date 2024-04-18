@@ -1,7 +1,7 @@
 class User < ApplicationRecord
   validates :name, :dob, presence: true
   validates :email, presence: true, uniqueness: true
-  validates_format_of :email, with: /\A[\w+\-.]+@[a-z\d\-]+(\[a-z]+)\.[a-z]+\z/i
+  validates_format_of :email, with: /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z\d\-]+)*\.[a-z]+\z/i
   validate :check_dob
 
   def check_dob

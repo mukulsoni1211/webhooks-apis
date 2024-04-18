@@ -1,4 +1,5 @@
 class UsersController < ApplicationController
+  after_action :trigger_webhooks
 
   def create
     user = User.new(user_params)
@@ -23,5 +24,12 @@ class UsersController < ApplicationController
   private
   def user_params
     params.require(:user).permit(:name, :email, :dob)
+  end
+
+  def trigger_webhooks
+    if response.status == 200
+      body = JSON.parse(response.body)['data']
+      ThirdPartyApi::Notify.new(body).call
+    end
   end
 end
